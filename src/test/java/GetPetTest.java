@@ -44,12 +44,6 @@ public class GetPetTest {
         String randomPetId = RandomStringUtils.randomNumeric(5),
                 randomPetName = "myCat_" + RandomStringUtils.randomAlphabetic(5);
 
-        //Map<String, Object> petData = new HashMap<>();
-        //petData.put("id", randomPetId);
-        //petData.put("name", randomPetName);
-        //petData.put("tags", "");
-        //petData.put("status", "available");
-
         given()
                 .log().all()
                 .baseUri("https://petstore.swagger.io")
@@ -136,32 +130,15 @@ public class GetPetTest {
     }
 
     @Test
-    public void updateAPetWithData() {
-        int id = 5550007;
+    public void updatePetWithData() {
+        int id = 10500;
         given()
-                .contentType("application/json")
-                .accept("application/json")
+                .contentType("application/x-www-form-urlencoded")
+                .param("name", "snoopy")
+                .param("status", "available")
                 .baseUri("https://petstore.swagger.io")
-//                .body("{\n" +
-//                        "  \"id\": 5550007,\n" +
-//                        "  \"category\": {\n" +
-//                        "    \"id\": 5550007,\n" +
-//                        "    \"name\": \"string\"\n" +
-//                        "  },\n" +
-//                        "  \"name\": \"bob2\",\n" +
-//                        "  \"photoUrls\": [\n" +
-//                        "    \"string\"\n" +
-//                        "  ],\n" +
-//                        "  \"tags\": [\n" +
-//                        "    {\n" +
-//                        "      \"id\": 5550007,\n" +
-//                        "      \"name\": \"string\"\n" +
-//                        "    }\n" +
-//                        "  ],\n" +
-//                        "  \"status\": \"available\"\n" +
-//                        "}")
                 .when()
-                .formParams("", "").post("/v2/pet/{id}", id)
+                .post("/v2/pet/{id}", id)
                 .then()
                 .log().all()
                 .statusCode(200);
