@@ -1,11 +1,36 @@
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class PetTests {
+
+    int id = 182;
+
+    String body = "{\n" +
+            "  \"id\": \""+ id +"\",\n" +
+            "  \"category\": {\n" +
+            "    \"id\": 0,\n" +
+            "    \"name\": \"string\"\n" +
+            "  },\n" +
+            "  \"name\": \"Snoopy\",\n" +
+            "  \"photoUrls\": [\n" +
+            "    \"string\"\n" +
+            "  ],\n" +
+            "  \"tags\": [\n" +
+            "    {\n" +
+            "      \"id\": 182,\n" +
+            "      \"name\": \"Snoopy\"\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"status\": \"available\"\n" +
+            "}";
+
+    //Response response = given().get("/pet/{id}", id);
 
     @Before
     public void before() {
@@ -15,9 +40,18 @@ public class PetTests {
         RestAssured.requestSpecification = spec.build();
     }
 
+    @After
+    public void after() {
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 200)
+            deletePetById();
+    }
+
     @Test
     public void getPetById() {
-        int id = 182;
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 404)
+            createNewPet();
         given()
                 .log()
                 .all()
@@ -32,6 +66,9 @@ public class PetTests {
 
     @Test
     public void getPetByStatus() {
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 404)
+            createNewPet();
         String status = "available";
         given()
                 .log()
@@ -42,31 +79,15 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body("status[0]", is((status)))
+                .body("status", everyItem(equalTo(status)))
                 .statusCode(200);
     }
 
     @Test
     public void createNewPet() {
-        int id = 182;
-        String body = "{\n" +
-                "  \"id\": \""+ id +"\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": 0,\n" +
-                "    \"name\": \"string\"\n" +
-                "  },\n" +
-                "  \"name\": \"Scooby\",\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": 0,\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 200)
+            deletePetById();
         given()
                 .log()
                 .all()
@@ -82,7 +103,9 @@ public class PetTests {
 
     @Test
     public void updatePetByDataForm() {
-        String id = "523";
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 404)
+            createNewPet();
         given()
                 .log()
                 .all()
@@ -93,31 +116,15 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body("message", is(id))
+                .body("message", is(String.valueOf(id)))
                 .statusCode(200);
     }
 
     @Test
     public void updatePet() {
-        int id = 182;
-        String body = "{\n" +
-                "  \"id\": \""+ id +"\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": 0,\n" +
-                "    \"name\": \"string\"\n" +
-                "  },\n" +
-                "  \"name\": \"Snoopy\",\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": 182,\n" +
-                "      \"name\": \"Snoopy\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 404)
+            createNewPet();
         given()
                 .log()
                 .all()
@@ -133,7 +140,11 @@ public class PetTests {
 
     @Test
     public void deletePetById() {
-        String id = "182";
+        Response response = given().get("/pet/{id}", id);
+        if (response.getStatusCode() == 404)
+            createNewPet();
+        if (response.getStatusCode() == 200)
+            System.out.println(id + "pet exists");
         given()
                 .log()
                 .all()
@@ -142,7 +153,7 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body("message", is(id))
+                .body("message", is(String.valueOf(id)))
                 .statusCode(200);
     }
 
