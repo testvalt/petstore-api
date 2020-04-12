@@ -1,45 +1,25 @@
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
 
 public class CreateNewPet {
 
-    long createdPetId;
+    PetEndpoint petEndpoint = new PetEndpoint();
 
-    @Before
-    public void before() {
-        RequestSpecBuilder spec = new RequestSpecBuilder();
-        spec.setBaseUri("https://petstore.swagger.io/v2");
-        spec.addHeader("Content-Type", "application/json");
-        RestAssured.requestSpecification = spec.build();
-    }
+    long petId;
 
     @After
     public void deletePet() {
-        given()
-                .log()
-                .all()
-                .when()
-                .delete("/pet/{id}", createdPetId)
-                .then()
-                .log()
-                .all()
-                .body("message", is(String.valueOf(createdPetId)))
-                .statusCode(200);
+        petEndpoint.deletePet(petId);
     }
 
     @Test
-    public void createNewPet() {
+    public void createMyPet() {
         int id = 0;
         String body = "{\n" +
-                "  \"id\": \""+ id +"\",\n" +
+                "  \"id\": \"" + id + "\",\n" +
                 "  \"category\": {\n" +
-                "    \"id\": \""+ id +"\",\n" +
+                "    \"id\": \"" + id + "\",\n" +
                 "    \"name\": \"string\"\n" +
                 "  },\n" +
                 "  \"name\": \"Scooby\",\n" +
@@ -48,25 +28,13 @@ public class CreateNewPet {
                 "  ],\n" +
                 "  \"tags\": [\n" +
                 "    {\n" +
-                "      \"id\": \""+ id +"\",\n" +
+                "      \"id\": \"" + id + "\",\n" +
                 "      \"name\": \"string\"\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  \"status\": \"available\"\n" +
                 "}";
-        ValidatableResponse response = given()
-                .log()
-                .all()
-                .body(body)
-                .when()
-                .post("/pet")
-                .then()
-                .log()
-                .all()
-                .statusCode(200);
-
-        createdPetId = response.extract().path("id");
-        System.out.println(createdPetId);
+        ValidatableResponse response = petEndpoint.createPet(body);
+        petId = response.extract().path("id");
     }
-
 }
