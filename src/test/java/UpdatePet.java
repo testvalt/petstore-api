@@ -5,60 +5,25 @@ import org.junit.Test;
 
 public class UpdatePet {
 
-    PetEndpoint petEndpoint = new PetEndpoint();
-
-    long petId;
+    private PetEndpoint petEndpoint = new PetEndpoint();
+    private long petId;
 
     @Before
-    public void createTestPet() {
-        int id = 0;
-        String body = "{\n" +
-                "  \"id\": \"" + id + "\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": \"" + id + "\",\n" +
-                "    \"name\": \"string\"\n" +
-                "  },\n" +
-                "  \"name\": \"Scooby\",\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": \"" + id + "\",\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
-        ValidatableResponse response = petEndpoint.createPet(body);
+    public void createPet() {
+        Pet pet = new Pet(0, "Scooby", "available");
+        ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
 
     @After
     public void deletePet() {
+
         petEndpoint.deletePet(petId);
     }
 
     @Test
     public void updatePetsName() {
-        String body = "{\n" +
-                "  \"id\": \"" + petId + "\",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": \"" + petId + "\",\n" +
-                "    \"name\": \"string\"\n" +
-                "  },\n" +
-                "  \"name\": \"Snoopy\",\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": \"" + petId + "\",\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"available\"\n" +
-                "}";
-        petEndpoint.updatePet(body);
+        Pet pet = new Pet(petId, "Snoopy", "pending");
+        petEndpoint.updatePet(pet, petId);
     }
 }

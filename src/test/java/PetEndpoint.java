@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class PetEndpoint {
 
+
     private final static String CREATE_PET = "/pet";
     private final static String GET_PET_BY_ID = "/pet/{id}";
     private final static String GET_PET_BY_STATUS = "/pet/findByStatus?status={status}";
@@ -24,9 +25,9 @@ public class PetEndpoint {
                 .all();
     }
 
-    public ValidatableResponse createPet(String body) {
+    public ValidatableResponse createPet(Pet pet) {
         return given()
-                .body(body)
+                .body(pet)
                 .when()
                 .post(CREATE_PET)
                 .then()
@@ -57,9 +58,9 @@ public class PetEndpoint {
                 .statusCode(200);
     }
 
-    public ValidatableResponse updatePet(String body) {
+    public ValidatableResponse updatePet(Pet pet, long petId) {
         return given()
-                .body(body)
+                .body(pet)
                 .when()
                 .put(UPDATE_PET)
                 .then()
