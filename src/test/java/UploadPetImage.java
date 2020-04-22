@@ -3,26 +3,28 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GetPetById {
+public class UploadPetImage {
 
     private PetEndpoint petEndpoint = new PetEndpoint();
-    private long petId;
+    private long createdPetId;
 
     @Before
     public void createPet() {
         Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
         ValidatableResponse response = petEndpoint.createPet(pet);
-        petId = response.extract().path("id");
+        createdPetId = response.extract().path("id");
     }
 
     @After
     public void deletePet() {
 
-        petEndpoint.deletePet(petId);
+        petEndpoint.deletePet(createdPetId);
     }
 
     @Test
-    public void getPetById() {
-        petEndpoint.getPet(petId);
+    public void uploadImage() {
+
+        petEndpoint.uploadPetImage(createdPetId);
     }
+
 }

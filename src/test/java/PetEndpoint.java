@@ -1,8 +1,14 @@
 import io.restassured.RestAssured;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
+
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -14,7 +20,13 @@ public class PetEndpoint {
     private final static String GET_PET_BY_STATUS = "/pet/findByStatus?status={status}";
     private final static String UPDATE_PET = "/pet";
     private final static String UPDATE_PET_BY_DATAFORM = "/pet/{id}";
+    private final static String UPLOAD_PET_IMAGE = "/pet/{petId}/uploadImage";
     private final static String DELETE_PET_BY_ID = "/pet/{id}";
+
+    static {
+        RestAssured.filters(new RequestLoggingFilter(LogDetail.ALL));
+        RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL));
+    }
 
     private RequestSpecification given() {
         return RestAssured
@@ -31,9 +43,7 @@ public class PetEndpoint {
                 .when()
                 .post(CREATE_PET)
                 .then()
-                .log()
-                .all()
-                .statusCode(200);
+                .statusCode(SC_OK);
     }
 
     public ValidatableResponse getPet(long petId) {
@@ -41,10 +51,8 @@ public class PetEndpoint {
                 .when()
                 .get(GET_PET_BY_ID, petId)
                 .then()
-                .log()
-                .all()
-                .body("id", anyOf(is(petId), is("available")))
-                .statusCode(200);
+                .body("id", anyOf(is(petId), is(Status.AVAILABLE)))
+                .statusCode(SC_OK);
     }
 
     public ValidatableResponse getPetByStatus(String status) {
@@ -52,10 +60,8 @@ public class PetEndpoint {
                 .when()
                 .get(GET_PET_BY_STATUS, status)
                 .then()
-                .log()
-                .all()
                 .body("status", everyItem(equalTo(status)))
-                .statusCode(200);
+                .statusCode(SC_OK);
     }
 
     public ValidatableResponse updatePet(Pet pet, long petId) {
@@ -64,10 +70,8 @@ public class PetEndpoint {
                 .when()
                 .put(UPDATE_PET)
                 .then()
-                .log()
-                .all()
                 .body("name", is("Snoopy"))
-                .statusCode(200);
+                .statusCode(SC_OK);
 
     }
 
@@ -78,11 +82,20 @@ public class PetEndpoint {
                 .when()
                 .post(UPDATE_PET_BY_DATAFORM, petId)
                 .then()
-                .log()
-                .all()
                 .body("message", is(String.valueOf(petId)))
-                .statusCode(200);
+                .statusCode(SC_OK);
 
+    }
+
+    public ValidatableResponse uploadPetImage(long petId) {
+        return given()
+                .contentType("multipart/form-data")
+                .multiPart(new File("/Users/val/Desktop/250px-Scooby-gang-1969.jpg"))
+                .when()
+                .post(UPLOAD_PET_IMAGE, petId)
+                .then()
+                .body("message", is("additionalMetadata: null\nFile uploaded to ./250px-Scooby-gang-1969.jpg, 20281 bytes"))
+                .statusCode(SC_OK);
     }
 
     public ValidatableResponse deletePet(long petId) {
@@ -90,9 +103,7 @@ public class PetEndpoint {
                 .when()
                 .delete(DELETE_PET_BY_ID, petId)
                 .then()
-                .log()
-                .all()
                 .body("message", is(String.valueOf(petId)))
-                .statusCode(200);
+                .statusCode(SC_OK);
     }
 }

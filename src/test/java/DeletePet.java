@@ -9,7 +9,7 @@ public class DeletePet {
 
     @Before
     public void createPet() {
-        Pet pet = new Pet(0, "Scooby", "available");
+        Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
