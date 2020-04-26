@@ -17,13 +17,12 @@ public class UpdatePetByDataForm {
 
     @After
     public void deletePet() {
-
         petEndpoint.deletePet(petId);
     }
 
     @Test
     public void updatePetByForm() {
-
-        petEndpoint.updatePetByDataForm(petId);
+        petEndpoint.updatePetByDataForm(petId, "Sezam", Status.PENDING);
     }
+
 }

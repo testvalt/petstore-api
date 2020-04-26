@@ -9,7 +9,6 @@ public class CreateNewPet {
 
     @After
     public void deletePet() {
-
         petEndpoint.deletePet(petId);
     }
 
@@ -19,4 +18,5 @@ public class CreateNewPet {
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
+
 }

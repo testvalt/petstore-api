@@ -16,7 +16,7 @@ public class DeletePet {
 
     @Test
     public void deleteMyPet() {
-
         petEndpoint.deletePet(petId);
     }
+
 }

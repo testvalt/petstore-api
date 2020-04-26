@@ -17,7 +17,6 @@ public class GetPetById {
 
     @After
     public void deletePet() {
-
         petEndpoint.deletePet(petId);
     }
 
@@ -25,4 +24,5 @@ public class GetPetById {
     public void getPetById() {
         petEndpoint.getPet(petId);
     }
+
 }

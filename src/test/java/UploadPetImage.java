@@ -6,25 +6,28 @@ import org.junit.Test;
 public class UploadPetImage {
 
     private PetEndpoint petEndpoint = new PetEndpoint();
-    private long createdPetId;
+    private long petId;
 
     @Before
     public void createPet() {
         Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
         ValidatableResponse response = petEndpoint.createPet(pet);
-        createdPetId = response.extract().path("id");
+        petId = response.extract().path("id");
     }
 
     @After
     public void deletePet() {
-
-        petEndpoint.deletePet(createdPetId);
+        petEndpoint.deletePet(petId);
     }
 
     @Test
-    public void uploadImage() {
+    public void uploadJpegPetImage() {
+        petEndpoint.uploadPetImage(petId, "scooby_image_supported.jpeg");
+    }
 
-        petEndpoint.uploadPetImage(createdPetId);
+    @Test
+    public void uploadPngPetImage() {
+        petEndpoint.uploadPetImage(petId, "scooby_image_supported.png");
     }
 
 }

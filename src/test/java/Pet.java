@@ -26,9 +26,7 @@ public class Pet {
         return category;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public List<String> getPhotoUrls() {
         return photoUrls;
@@ -41,4 +39,5 @@ public class Pet {
     public Status getStatus() {
         return status;
     }
+
 }

@@ -24,6 +24,7 @@ public class UpdatePet {
     @Test
     public void updatePetsName() {
         Pet pet = new Pet(petId, "Snoopy", Status.PENDING);
-        petEndpoint.updatePet(pet, petId);
+        petEndpoint.updatePet(pet);
     }
+
 }

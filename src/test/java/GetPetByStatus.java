@@ -17,7 +17,6 @@ public class GetPetByStatus {
 
     @After
     public void deletePet() {
-
         petEndpoint.deletePet(petId);
     }
 
@@ -26,4 +25,5 @@ public class GetPetByStatus {
         String status = "available";
         petEndpoint.getPetByStatus(status);
     }
+
 }

@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -12,7 +13,7 @@ public class PetTests {
     int id = 182;
 
     String body = "{\n" +
-            "  \"id\": \""+ id +"\",\n" +
+            "  \"id\": \"" + id + "\",\n" +
             "  \"category\": {\n" +
             "    \"id\": 0,\n" +
             "    \"name\": \"string\"\n" +
@@ -60,7 +61,7 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body( "id", anyOf(is(id), is("available")))
+                .body("id", anyOf(is(id), is("available")))
                 .statusCode(200);
     }
 
@@ -97,7 +98,7 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body( "id", is(id))
+                .body("id", is(id))
                 .statusCode(200);
     }
 
@@ -134,7 +135,7 @@ public class PetTests {
                 .then()
                 .log()
                 .all()
-                .body( "name", is("Snoopy"))
+                .body("name", is("Snoopy"))
                 .statusCode(200);
     }
 

@@ -6,14 +6,16 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
 
-public class PetEndpoint {
+import org.apache.commons.io.FileUtils;
 
+public class PetEndpoint {
 
     private final static String CREATE_PET = "/pet";
     private final static String GET_PET_BY_ID = "/pet/{id}";
@@ -43,6 +45,7 @@ public class PetEndpoint {
                 .when()
                 .post(CREATE_PET)
                 .then()
+                .body("name", is(pet.getName()))
                 .statusCode(SC_OK);
     }
 
@@ -51,7 +54,7 @@ public class PetEndpoint {
                 .when()
                 .get(GET_PET_BY_ID, petId)
                 .then()
-                .body("id", anyOf(is(petId), is(Status.AVAILABLE)))
+                .body("id", is(petId))
                 .statusCode(SC_OK);
     }
 
@@ -64,21 +67,21 @@ public class PetEndpoint {
                 .statusCode(SC_OK);
     }
 
-    public ValidatableResponse updatePet(Pet pet, long petId) {
+    public ValidatableResponse updatePet(Pet pet) {
         return given()
                 .body(pet)
                 .when()
                 .put(UPDATE_PET)
                 .then()
-                .body("name", is("Snoopy"))
+                .body("name", is(pet.getName()))
                 .statusCode(SC_OK);
 
     }
 
-    public ValidatableResponse updatePetByDataForm(long petId) {
+    public ValidatableResponse updatePetByDataForm(long petId, String updatedPetName, Status updatedStatus) {
         return given()
                 .contentType("application/x-www-form-urlencoded")
-                .params("name", "Sezam", "status", "pending")
+                .params("name", updatedPetName, "status", updatedStatus)
                 .when()
                 .post(UPDATE_PET_BY_DATAFORM, petId)
                 .then()
@@ -87,15 +90,23 @@ public class PetEndpoint {
 
     }
 
-    public ValidatableResponse uploadPetImage(long petId) {
+    public ValidatableResponse uploadPetImage(long petId, String fileName) {
+
+        File file = new File(getClass().getClassLoader().getResource(fileName).getFile());
+        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+
+        String petImageType = fileTypeMap.getContentType(file.getName()).split("/")[1];
+        long petImageSize = FileUtils.sizeOf(file);
+
         return given()
                 .contentType("multipart/form-data")
-                .multiPart(new File("/Users/val/Desktop/250px-Scooby-gang-1969.jpg"))
+                .multiPart(file)
                 .when()
                 .post(UPLOAD_PET_IMAGE, petId)
                 .then()
-                .body("message", is("additionalMetadata: null\nFile uploaded to ./250px-Scooby-gang-1969.jpg, 20281 bytes"))
+                .body("message", allOf(containsString(petImageType), containsString(String.valueOf(petImageSize)), containsString(file.getName())))
                 .statusCode(SC_OK);
+
     }
 
     public ValidatableResponse deletePet(long petId) {
@@ -106,4 +117,5 @@ public class PetEndpoint {
                 .body("message", is(String.valueOf(petId)))
                 .statusCode(SC_OK);
     }
+
 }
