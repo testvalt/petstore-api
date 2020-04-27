@@ -95,7 +95,7 @@ public class PetEndpoint {
         File file = new File(getClass().getClassLoader().getResource(fileName).getFile());
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
 
-        String petImageType = fileTypeMap.getContentType(file.getName()).split("/")[1];
+        String petImageType = fileTypeMap.getContentType(file.getName()).split("/")[0];
         long petImageSize = FileUtils.sizeOf(file);
 
         return given()

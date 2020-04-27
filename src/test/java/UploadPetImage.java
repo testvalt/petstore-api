@@ -31,11 +31,6 @@ public class UploadPetImage {
     }
 
     @Test
-    public void uploadNonImageFile() {
-        petEndpoint.uploadPetImage(petId, "scooby_non_image_file.pdf");
-    }
-
-    @Test
     public void uploadImageWithShortName() {
         petEndpoint.uploadPetImage(petId, "a.jpeg");
     }
@@ -58,6 +53,16 @@ public class UploadPetImage {
     @Test
     public void uploadImageWithMixedSymbolsName() {
         petEndpoint.uploadPetImage(petId, "ScOOby7777$$$555_@miXXED66,,name.jpeg");
+    }
+
+    @Test
+    public void uploadLargeImage() {
+        petEndpoint.uploadPetImage(petId, "Large_poster_500kb_image.jpeg");
+    }
+
+    @Test
+    public void uploadGifImage() {
+        petEndpoint.uploadPetImage(petId, "gif_image.gif");
     }
 
 }
