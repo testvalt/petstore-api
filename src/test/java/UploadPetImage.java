@@ -22,12 +22,42 @@ public class UploadPetImage {
 
     @Test
     public void uploadJpegPetImage() {
-        petEndpoint.uploadPetImage(petId, "scooby_image_supported.jpeg");
+        petEndpoint.uploadPetImage(petId, "scooby_jpeg_image.jpeg");
     }
 
     @Test
     public void uploadPngPetImage() {
-        petEndpoint.uploadPetImage(petId, "scooby_image_supported.png");
+        petEndpoint.uploadPetImage(petId, "scooby_png_image.png");
+    }
+
+    @Test
+    public void uploadNonImageFile() {
+        petEndpoint.uploadPetImage(petId, "scooby_non_image_file.pdf");
+    }
+
+    @Test
+    public void uploadImageWithShortName() {
+        petEndpoint.uploadPetImage(petId, "a.jpeg");
+    }
+
+    @Test
+    public void uploadImageWithLongName() {
+        petEndpoint.uploadPetImage(petId, "scoobyverylongnmameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.jpeg");
+    }
+
+    @Test
+    public void uploadImageWithUppercaseName() {
+        petEndpoint.uploadPetImage(petId, "SCOOBYUPPERCASENAME.jpeg");
+    }
+
+    @Test
+    public void uploadImageWithNumbersName() {
+        petEndpoint.uploadPetImage(petId, "123456789.jpeg");
+    }
+
+    @Test
+    public void uploadImageWithMixedSymbolsName() {
+        petEndpoint.uploadPetImage(petId, "ScOOby7777$$$555_@miXXED66,,name.jpeg");
     }
 
 }
