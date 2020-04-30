@@ -18,4 +18,6 @@
 10. The newman run command allows you to specify a collection to be run. You can easily export your Postman Collection as a json file from the Postman App and run it using Newman:
     `newman run examples/sample-collection.json`
 11. If your collection file is available as an URL (such as from our Cloud API service), Newman can fetch your file and run it as well:
-    `newman run https://www.getpostman.com/collections/cf19e8e5e8a3a4c89b5e`  
+    `newman run https://www.getpostman.com/collections/cf19e8e5e8a3a4c89b5e`
+12. View Serenity HTML report
+    `mvn serenity:aggregate`      

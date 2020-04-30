@@ -2,10 +2,15 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Steps;
+import org.junit.runner.RunWith;
 
+@RunWith(SerenityRunner.class)
 public class UpdatePet {
 
-    private PetEndpoint petEndpoint = new PetEndpoint();
+    @Steps
+    private PetEndpoint petEndpoint;
     private long petId;
 
     @Before
