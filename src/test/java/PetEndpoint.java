@@ -66,9 +66,9 @@ public class PetEndpoint {
     public ValidatableResponse getPetByStatus(Status status) {
         return given()
                 .when()
-                .get(GET_PET_BY_STATUS, status.name().toLowerCase())
+                .get(GET_PET_BY_STATUS, status.name())
                 .then()
-                .body("status", everyItem(equalTo(status.name().toLowerCase())))
+                .body("status", everyItem(equalTo(status.name())))
                 .statusCode(SC_OK);
     }
 
