@@ -12,7 +12,7 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 
 import static org.apache.http.HttpStatus.SC_OK;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.apache.commons.io.FileUtils;
@@ -63,12 +63,12 @@ public class PetEndpoint {
     }
 
     @Step
-    public ValidatableResponse getPetByStatus(String status) {
+    public ValidatableResponse getPetByStatus(Status status) {
         return given()
                 .when()
-                .get(GET_PET_BY_STATUS, status)
+                .get(GET_PET_BY_STATUS, status.name().toLowerCase())
                 .then()
-                .body("status", everyItem(equalTo(status)))
+                .body("status", everyItem(equalTo(status.name().toLowerCase())))
                 .statusCode(SC_OK);
     }
 
@@ -103,7 +103,7 @@ public class PetEndpoint {
         File file = new File(getClass().getClassLoader().getResource(fileName).getFile());
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
 
-        String petImageType = fileTypeMap.getContentType(file.getName()).split("/")[0];
+        String petImageType = fileTypeMap.getContentType(file.getName()).split("/")[1];
         long petImageSize = FileUtils.sizeOf(file);
 
         return given()

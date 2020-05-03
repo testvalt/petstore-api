@@ -1,21 +1,39 @@
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
+import net.thucydides.junit.annotations.TestData;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import org.junit.runner.RunWith;
 
-@RunWith(SerenityRunner.class)
+import java.util.Arrays;
+import java.util.Collection;
+
+@RunWith(SerenityParameterizedRunner.class)
 public class GetPetByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
     private long petId;
+    private final Status status;
+
+    public GetPetByStatus(Status status) {
+        this.status = status;
+    }
+
+    @TestData
+    public static Collection<Object[]> testData() {
+        return Arrays.asList(new Object[][]{
+                {Status.AVAILABLE},
+                {Status.PENDING},
+                {Status.SOLD}
+        });
+    }
 
     @Before
     public void createPet() {
-        Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
+        Pet pet = new Pet(0, "Scooby", status);
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
@@ -26,8 +44,7 @@ public class GetPetByStatus {
     }
 
     @Test
-    public void getPetByAvailableStatus() {
-        String status = "available";
+    public void getPetByStatus() {
         petEndpoint.getPetByStatus(status);
     }
 
