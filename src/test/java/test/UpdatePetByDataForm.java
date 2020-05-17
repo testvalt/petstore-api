@@ -1,4 +1,11 @@
+package test;
+
+import endPoint.PetEndpoint;
+import model.Pet;
+import model.Status;
+import model.Category;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -6,7 +13,7 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.runner.RunWith;
 
 @RunWith(SerenityRunner.class)
-public class DeletePet {
+public class UpdatePetByDataForm {
 
     @Steps
     private PetEndpoint petEndpoint;
@@ -14,14 +21,24 @@ public class DeletePet {
 
     @Before
     public void createPet() {
-        Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
+        Pet pet = Pet.builder()
+                .id(0)
+                .name("Scooby")
+                .status(Status.AVAILABLE)
+                .category(Category.builder().build())
+                .build();
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
 
-    @Test
-    public void deleteMyPet() {
+    @After
+    public void deletePet() {
         petEndpoint.deletePet(petId);
+    }
+
+    @Test
+    public void updatePetByForm() {
+        petEndpoint.updatePetByDataForm(petId, "Snoopy", Status.PENDING);
     }
 
 }

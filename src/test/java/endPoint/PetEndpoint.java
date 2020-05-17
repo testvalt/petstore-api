@@ -1,3 +1,8 @@
+package endPoint;
+
+import model.Pet;
+import model.Status;
+
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -16,6 +21,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.CoreMatchers;
 
 public class PetEndpoint {
 
@@ -48,7 +54,7 @@ public class PetEndpoint {
                 .when()
                 .post(CREATE_PET)
                 .then()
-                .body("name", is(pet.getName()))
+                .body("name", CoreMatchers.is(pet.getName()))
                 .statusCode(SC_OK);
     }
 
@@ -79,7 +85,8 @@ public class PetEndpoint {
                 .when()
                 .put(UPDATE_PET)
                 .then()
-                .body("name", is(pet.getName()))
+                .body("name", CoreMatchers.is(pet.getName()))
+                //.body("name", is(pet.getName()))
                 .statusCode(SC_OK);
 
     }

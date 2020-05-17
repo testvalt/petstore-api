@@ -1,3 +1,9 @@
+package test;
+
+import endPoint.PetEndpoint;
+import model.Pet;
+import model.Status;
+import model.Category;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -15,7 +21,12 @@ public class UpdatePet {
 
     @Before
     public void createPet() {
-        Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
+        Pet pet = Pet.builder()
+                .id(0)
+                .name("Scooby")
+                .status(Status.AVAILABLE)
+                .category(Category.builder().build())
+                .build();
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
@@ -27,8 +38,13 @@ public class UpdatePet {
     }
 
     @Test
-    public void updatePetsName() {
-        Pet pet = new Pet(petId, "Snoopy", Status.PENDING);
+    public void updateMyPet() {
+        Pet pet = Pet.builder()
+                .id(0)
+                .name("Snoopy")
+                .status(Status.PENDING)
+                .category(Category.builder().build())
+                .build();
         petEndpoint.updatePet(pet);
     }
 

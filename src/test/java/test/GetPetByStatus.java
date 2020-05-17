@@ -1,3 +1,9 @@
+package test;
+
+import endPoint.PetEndpoint;
+import model.Pet;
+import model.Status;
+import model.Category;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.junit.annotations.TestData;
 import io.restassured.response.ValidatableResponse;
@@ -11,35 +17,34 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(SerenityParameterizedRunner.class)
-public class UploadPetImage {
+public class GetPetByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
     private long petId;
-    private final String fileName;
+    private final Status status;
 
-    public UploadPetImage(String fileName) {
-        this.fileName = fileName;
+    public GetPetByStatus(Status status) {
+        this.status = status;
     }
 
     @TestData
     public static Collection<Object[]> testData() {
         return Arrays.asList(new Object[][]{
-                {"123456789.jpeg"},
-                {"a.jpeg"},
-                {"gif_image.gif"},
-                {"Large_poster_500kb_image.jpeg"},
-                {"ScOOby7777$$$555_@miXXED66,,name_image.jpeg"},
-                {"scooby_jpeg_image.jpeg"},
-                {"scooby_png_image.png"},
-                {"SCOOBYUPPERCASENAME_IMAGE.jpeg"},
-                {"scoobyverylongnmameeeeeeeeeeeeeeeeeeee_image.jpeg"}
+                {Status.AVAILABLE},
+                {Status.PENDING},
+                {Status.SOLD}
         });
     }
 
     @Before
     public void createPet() {
-        Pet pet = new Pet(0, "Scooby", Status.AVAILABLE);
+        Pet pet = Pet.builder()
+                .id(0)
+                .name("Scooby")
+                .status(Status.AVAILABLE)
+                .category(Category.builder().build())
+                .build();
         ValidatableResponse response = petEndpoint.createPet(pet);
         petId = response.extract().path("id");
     }
@@ -50,8 +55,8 @@ public class UploadPetImage {
     }
 
     @Test
-    public void uploadJpegPetImage() {
-        petEndpoint.uploadPetImage(petId, fileName);
+    public void getPetByStatus() {
+        petEndpoint.getPetByStatus(status);
     }
 
 }
