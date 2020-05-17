@@ -13,7 +13,7 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.runner.RunWith;
 
 @RunWith(SerenityRunner.class)
-public class UpdatePet {
+public class GetPetInventoriesByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
@@ -33,19 +33,12 @@ public class UpdatePet {
 
     @After
     public void deletePet() {
-
         petEndpoint.deletePet(petId);
     }
 
     @Test
-    public void updateMyPet() {
-        Pet pet = Pet.builder()
-                .id(0)
-                .name("Snoopy")
-                .status(Status.PENDING)
-                .category(Category.builder().build())
-                .build();
-        petEndpoint.updatePet(pet);
+    public void getPetInventoriesByStatus() {
+        petEndpoint.getPetInventoriesByStatus();
     }
 
 }

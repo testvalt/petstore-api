@@ -17,7 +17,7 @@ public class UpdatePetByDataForm {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private long petId;
+    private int petId;
 
     @Before
     public void createPet() {

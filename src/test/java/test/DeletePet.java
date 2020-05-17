@@ -16,7 +16,7 @@ public class DeletePet {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private long petId;
+    private int petId;
 
     @Before
     public void createPet() {

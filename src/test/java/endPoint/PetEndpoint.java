@@ -2,6 +2,7 @@ package endPoint;
 
 import model.Pet;
 import model.Status;
+import model.PetOrder;
 
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -32,6 +33,10 @@ public class PetEndpoint {
     private final static String UPDATE_PET_BY_DATAFORM = "/pet/{id}";
     private final static String UPLOAD_PET_IMAGE = "/pet/{petId}/uploadImage";
     private final static String DELETE_PET_BY_ID = "/pet/{id}";
+    private final static String CREATE_PET_ORDER = "/store/order";
+    private final static String GET_PET_ORDER_BY_ID = "/store/order/{id}";
+    private final static String DELETE_PET_ORDER_BY_ID = "/store/order/{id}";
+    private final static String GET_PET_INVENTORIES_BY_STATUS = "/store/inventory";
 
     static {
         SerenityRest.filters(new RequestLoggingFilter(LogDetail.ALL));
@@ -59,7 +64,7 @@ public class PetEndpoint {
     }
 
     @Step
-    public ValidatableResponse getPet(long petId) {
+    public ValidatableResponse getPet(int petId) {
         return given()
                 .when()
                 .get(GET_PET_BY_ID, petId)
@@ -92,7 +97,7 @@ public class PetEndpoint {
     }
 
     @Step
-    public ValidatableResponse updatePetByDataForm(long petId, String updatedPetName, Status updatedStatus) {
+    public ValidatableResponse updatePetByDataForm(int petId, String updatedPetName, Status updatedStatus) {
         return given()
                 .contentType("application/x-www-form-urlencoded")
                 .params("name", updatedPetName, "status", updatedStatus)
@@ -105,7 +110,7 @@ public class PetEndpoint {
     }
 
     @Step
-    public ValidatableResponse uploadPetImage(long petId, String fileName) {
+    public ValidatableResponse uploadPetImage(int petId, String fileName) {
 
         File file = new File(getClass().getClassLoader().getResource(fileName).getFile());
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
@@ -125,12 +130,52 @@ public class PetEndpoint {
     }
 
     @Step
-    public ValidatableResponse deletePet(long petId) {
+    public ValidatableResponse deletePet(int petId) {
         return given()
                 .when()
                 .delete(DELETE_PET_BY_ID, petId)
                 .then()
                 .body("message", is(String.valueOf(petId)))
+                .statusCode(SC_OK);
+    }
+
+    @Step
+    public ValidatableResponse createPetOrder(PetOrder order) {
+        return given()
+                .body(order)
+                .when()
+                .post(CREATE_PET_ORDER)
+                .then()
+                .body("id", is(order.getId()))
+                .statusCode(SC_OK);
+    }
+
+    @Step
+    public ValidatableResponse getPetOrder(int orderId) {
+        return given()
+                .when()
+                .get(GET_PET_ORDER_BY_ID, orderId)
+                .then()
+                .body("id", is(orderId))
+                .statusCode(SC_OK);
+    }
+
+    @Step
+    public ValidatableResponse deletePetOrder(int orderId) {
+        return given()
+                .when()
+                .delete(DELETE_PET_ORDER_BY_ID, orderId)
+                .then()
+                .body("message", is(String.valueOf(orderId)))
+                .statusCode(SC_OK);
+    }
+
+    @Step
+    public ValidatableResponse getPetInventoriesByStatus() {
+        return given()
+                .when()
+                .get(GET_PET_INVENTORIES_BY_STATUS)
+                .then()
                 .statusCode(SC_OK);
     }
 

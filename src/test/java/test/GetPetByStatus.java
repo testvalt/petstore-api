@@ -21,7 +21,7 @@ public class GetPetByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private long petId;
+    private int petId;
     private final Status status;
 
     public GetPetByStatus(Status status) {
