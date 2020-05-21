@@ -1,8 +1,8 @@
-package test;
+package test.pet;
 
 import endPoint.PetEndpoint;
 import model.Pet;
-import model.Status;
+import model.PetStatus;
 import model.Category;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.junit.annotations.TestData;
@@ -21,19 +21,19 @@ public class GetPetByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private int petId;
-    private final Status status;
+    private long petId;
+    private final PetStatus status;
 
-    public GetPetByStatus(Status status) {
+    public GetPetByStatus(PetStatus status) {
         this.status = status;
     }
 
     @TestData
     public static Collection<Object[]> testData() {
         return Arrays.asList(new Object[][]{
-                {Status.AVAILABLE},
-                {Status.PENDING},
-                {Status.SOLD}
+                {PetStatus.AVAILABLE},
+                {PetStatus.PENDING},
+                {PetStatus.SOLD}
         });
     }
 
@@ -42,7 +42,7 @@ public class GetPetByStatus {
         Pet pet = Pet.builder()
                 .id(0)
                 .name("Scooby")
-                .status(Status.AVAILABLE)
+                .status(PetStatus.AVAILABLE)
                 .category(Category.builder().build())
                 .build();
         ValidatableResponse response = petEndpoint.createPet(pet);

@@ -1,8 +1,9 @@
-package test;
+package test.store;
 
 import endPoint.PetEndpoint;
+import endPoint.StoreEndpoint;
 import model.Pet;
-import model.Status;
+import model.PetStatus;
 import model.Category;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
@@ -13,18 +14,20 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.runner.RunWith;
 
 @RunWith(SerenityRunner.class)
-public class GetPetById {
+public class GetPetInventoriesByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private int petId;
+    @Steps
+    private StoreEndpoint storeEndpoint;
+    private long petId;
 
     @Before
     public void createPet() {
         Pet pet = Pet.builder()
                 .id(0)
                 .name("Scooby")
-                .status(Status.AVAILABLE)
+                .status(PetStatus.AVAILABLE)
                 .category(Category.builder().build())
                 .build();
         ValidatableResponse response = petEndpoint.createPet(pet);
@@ -37,8 +40,8 @@ public class GetPetById {
     }
 
     @Test
-    public void getPetById() {
-        petEndpoint.getPet(petId);
+    public void getPetInventoriesByStatus() {
+        storeEndpoint.getPetInventoriesByStatus();
     }
 
 }

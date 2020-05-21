@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PetOrder {
-    private int id;
-    private int petId;
+public class Order {
+    private long id;
+    private long petId;
     private int quantity;
     private String shipDate;
-    private PetOrderStatus status;
+    private OrderStatus status;
     private boolean complete;
 }

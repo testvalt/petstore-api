@@ -1,8 +1,8 @@
-package test;
+package test.pet;
 
 import endPoint.PetEndpoint;
 import model.Pet;
-import model.Status;
+import model.PetStatus;
 import model.Category;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.junit.annotations.TestData;
@@ -21,7 +21,7 @@ public class UploadPetImage {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private int petId;
+    private long petId;
     private final String fileName;
 
     public UploadPetImage(String fileName) {
@@ -48,7 +48,7 @@ public class UploadPetImage {
         Pet pet = Pet.builder()
                 .id(0)
                 .name("Scooby")
-                .status(Status.AVAILABLE)
+                .status(PetStatus.AVAILABLE)
                 .category(Category.builder().build())
                 .build();
         ValidatableResponse response = petEndpoint.createPet(pet);

@@ -1,6 +1,6 @@
 package model;
 
-public enum PetOrderStatus {
+public enum OrderStatus {
     PLACED,
     APPROVED,
     DELIVERED
