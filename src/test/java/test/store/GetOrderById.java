@@ -18,23 +18,23 @@ public class GetOrderById {
 
     @Steps
     private PetEndpoint petEndpoint;
-    private StoreEndpoint storeEndpoint;
     private long petId;
-    private long orderId;
+
+    @Steps
+    private StoreEndpoint storeEndpoint;
+    private int orderId;
 
     @Before
-    public void createPet() {
+    public void petOrderPreconditions() {
         Pet pet = Pet.builder()
                 .id(0)
                 .name("Scooby")
                 .status(PetStatus.AVAILABLE)
                 .category(Category.builder().build())
                 .build();
-        ValidatableResponse response = petEndpoint.createPet(pet);
-        petId = response.extract().path("id");
-    }
-    
-    public void createOrder() {
+        ValidatableResponse responsePet = petEndpoint.createPet(pet);
+        petId = responsePet.extract().path("id");
+
         Order order = Order.builder()
                 .id(ThreadLocalRandom.current().nextInt(1, 1000 + 1))
                 .petId(petId)
@@ -43,16 +43,13 @@ public class GetOrderById {
                 .status(OrderStatus.PLACED)
                 .complete(true)
                 .build();
-        ValidatableResponse response = storeEndpoint.createOrder(order);
-        orderId = response.extract().path("id");
+        ValidatableResponse responseOrder = storeEndpoint.createOrder(order);
+        orderId = responseOrder.extract().path("id");
     }
 
     @After
-    public void deleteOrder() {
+    public void petOrderPostconditions() {
         storeEndpoint.deleteOrder(orderId);
-    }
-
-    public void deletePet() {
         petEndpoint.deletePet(petId);
     }
 

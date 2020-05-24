@@ -18,9 +18,10 @@ public class GetPetInventoriesByStatus {
 
     @Steps
     private PetEndpoint petEndpoint;
+    private long petId;
+
     @Steps
     private StoreEndpoint storeEndpoint;
-    private long petId;
 
     @Before
     public void createPet() {

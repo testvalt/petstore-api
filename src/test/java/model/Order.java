@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Order {
-    private long id;
+    private int id;
     private long petId;
     private int quantity;
     private String shipDate;

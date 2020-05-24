@@ -15,6 +15,8 @@ import net.thucydides.core.annotations.Step;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.CoreMatchers.*;
 
+import static org.hamcrest.Matchers.greaterThan;
+
 public class StoreEndpoint {
 
     private final static String CREATE_PET_ORDER = "/store/order";
@@ -43,12 +45,12 @@ public class StoreEndpoint {
                 .when()
                 .post(CREATE_PET_ORDER)
                 .then()
-               // .body("id", is(order.getId()))
+                .body("id", is(order.getId()))
                 .statusCode(SC_OK);
     }
 
     @Step
-    public ValidatableResponse getOrder(long orderId) {
+    public ValidatableResponse getOrder(int orderId) {
         return given()
                 .when()
                 .get(GET_PET_ORDER_BY_ID, orderId)
@@ -58,7 +60,7 @@ public class StoreEndpoint {
     }
 
     @Step
-    public ValidatableResponse deleteOrder(long orderId) {
+    public ValidatableResponse deleteOrder(int orderId) {
         return given()
                 .when()
                 .delete(DELETE_PET_ORDER_BY_ID, orderId)
@@ -73,6 +75,8 @@ public class StoreEndpoint {
                 .when()
                 .get(GET_PET_INVENTORIES_BY_STATUS)
                 .then()
+                .body("AVAILABLE", greaterThan(0))
                 .statusCode(SC_OK);
+
     }
 }
